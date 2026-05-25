@@ -98,14 +98,18 @@ for (const s of equity) {
   const before = days.filter(d => d.key < s.startKey);
   const preDay = before.length ? before[before.length - 1] : null;
   const curDay = days[days.length - 1];
+  // 前一交易日 (相對於 curDay): 倒數第 2 筆
+  const prevDay = days.length >= 2 ? days[days.length - 2] : null;
   const last20 = days.slice(-20);
   const ma20 = last20.length ? last20.reduce((a,d) => a+d.close, 0) / last20.length : null;
   const changePct = (preDay && curDay) ? (curDay.close - preDay.close) / preDay.close * 100 : null;
+  const dayChangePct = (prevDay && curDay) ? (curDay.close - prevDay.close) / prevDay.close * 100 : null;
   results.push({
     ...s, status: 'OK',
     preClose: preDay?.close, preDate: preDay?.date,
     curClose: curDay.close, curDate: curDay.date,
-    changePct, ma20,
+    prevClose: prevDay?.close, prevDate: prevDay?.date,
+    changePct, dayChangePct, ma20,
     ma20From: last20[0].date, ma20To: last20[last20.length-1].date, ma20N: last20.length,
   });
 }
@@ -124,12 +128,12 @@ for (const r of results) {
     ? (r.curClose - r.ma20) / r.ma20 * 100 : null;
 }
 
-const headers = ['來源', '代號', '名稱', '處置期間', '處置條件', '處置措施', '進處置前收盤', '前一日日期', '最新收盤', '最新日期', '漲跌幅', '20日均價', '20MA乖離率', '20MA起迄'];
+const headers = ['來源', '代號', '名稱', '處置期間', '處置條件', '處置措施', '進處置前收盤', '前一日日期', '最新收盤', '最新日期', '當日漲跌幅', '漲跌幅', '20日均價', '20MA乖離率', '20MA起迄'];
 const out = [headers.join('\t')];
 for (const r of results) {
   out.push([
     r.source, r.code, r.name, r.period, r.cond, r.measure,
-    fmt(r.preClose), r.preDate || '', fmt(r.curClose), r.curDate || '', fmtP(r.changePct), fmt(r.ma20), fmtP(r.bias),
+    fmt(r.preClose), r.preDate || '', fmt(r.curClose), r.curDate || '', fmtP(r.dayChangePct), fmtP(r.changePct), fmt(r.ma20), fmtP(r.bias),
     r.ma20N ? `${r.ma20From}~${r.ma20To} (${r.ma20N}日)` : '',
   ].join('\t'));
 }

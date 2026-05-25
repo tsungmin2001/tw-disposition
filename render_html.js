@@ -146,6 +146,7 @@ const html = `<!DOCTYPE html>
   <th data-key="處置措施">處置措施</th>
   <th data-key="進處置前收盤" class="num">進處置前收盤</th>
   <th data-key="最新收盤" class="num">最新收盤</th>
+  <th data-key="當日漲跌幅" class="num">當日漲跌幅</th>
   <th data-key="漲跌幅" class="num">漲跌幅</th>
   <th data-key="20日均價" class="num">20日均價</th>
   <th data-key="20MA乖離率" class="num">20MA乖離率</th>
@@ -169,6 +170,7 @@ const html = `<!DOCTYPE html>
   <th data-key="處置措施">處置措施</th>
   <th data-key="進處置前收盤" class="num">進處置前收盤</th>
   <th data-key="最新收盤" class="num">最新收盤</th>
+  <th data-key="當日漲跌幅" class="num">當日漲跌幅</th>
   <th data-key="漲跌幅" class="num">漲跌幅</th>
   <th data-key="20日均價" class="num">20日均價</th>
   <th data-key="20MA乖離率" class="num">20MA乖離率</th>
@@ -221,6 +223,7 @@ function rowHTML(d) {
     '<td><span class="period">' + (d['處置措施']||'') + '</span></td>' +
     '<td class="num">' + (d['進處置前收盤']||'') + '<br><span class="period">' + (d['前一日日期']||'') + '</span></td>' +
     '<td class="num">' + (d['最新收盤']||'') + '<br><span class="period">' + (d['最新日期']||'') + '</span></td>' +
+    fmtPctCell(d['當日漲跌幅']) +
     fmtPctCell(d['漲跌幅']) +
     '<td class="num">' + (d['20日均價']||'') + '</td>' +
     fmtPctCell(d['20MA乖離率']) +
