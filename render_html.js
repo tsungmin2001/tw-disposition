@@ -104,10 +104,12 @@ const html = `<!DOCTYPE html>
 
 <div class="toolbar">
   <input id="search" placeholder="🔍 搜尋代號 / 名稱 / 產業..." />
-  <select id="srcFilter">
-    <option value="">全部來源</option>
-    <option value="TWSE">僅 TWSE 上市</option>
-    <option value="TPEX">僅 TPEX 上櫃</option>
+  <select id="measureFilter">
+    <option value="">全部處置措施</option>
+    ${[...new Set(data.map(d => {
+      const m = (d['處置措施']||'').match(/(\d+)分/);
+      return m ? m[1] + '分' : null;
+    }).filter(Boolean))].sort((a,b) => parseInt(a) - parseInt(b)).map(i => `<option value="${i}">${i} 撮合</option>`).join('')}
   </select>
   <select id="indFilter">
     <option value="">全部細產業</option>
@@ -146,7 +148,7 @@ const html = `<!DOCTYPE html>
 const DATA = ${JSON.stringify(data)};
 const tbody = document.getElementById('tbody');
 const search = document.getElementById('search');
-const srcF = document.getElementById('srcFilter');
+const measureF = document.getElementById('measureFilter');
 const indF = document.getElementById('indFilter');
 
 let sortKey = '漲跌幅';
@@ -168,10 +170,13 @@ function fmtPctCell(s) {
 
 function render() {
   const q = search.value.trim().toLowerCase();
-  const sv = srcF.value;
+  const mv = measureF.value;
   const iv = indF.value;
   let filtered = DATA.filter(d => {
-    if (sv && d['來源'] !== sv) return false;
+    if (mv) {
+      const mm = (d['處置措施']||'').match(/(\d+)分/);
+      if (!mm || (mm[1] + '分') !== mv) return false;
+    }
     if (iv && d['細產業'] !== iv) return false;
     if (q && !(d['代號'].toLowerCase().includes(q) || d['名稱'].toLowerCase().includes(q) || (d['細產業']||'').toLowerCase().includes(q) || (d['次產業']||'').toLowerCase().includes(q))) return false;
     return true;
@@ -221,7 +226,7 @@ document.querySelectorAll('th').forEach(th => {
 });
 
 search.addEventListener('input', render);
-srcF.addEventListener('change', render);
+measureF.addEventListener('change', render);
 indF.addEventListener('change', render);
 
 render();
