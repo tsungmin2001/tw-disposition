@@ -56,6 +56,19 @@ const html = `<!DOCTYPE html>
   h2.section-up { border-left-color: #f85149; color: #f85149; }
   h2.section-dn { border-left-color: #3fb950; color: #3fb950; }
   h2 .count { color: #8b949e; font-size: 15px; margin-left: 6px; font-weight: normal; }
+  .industry-stats { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 16px; align-items: flex-start; }
+  .pie-wrap { flex: 0 0 240px; }
+  .stats-table-wrap { flex: 1; min-width: 320px; max-width: 600px; overflow-x: auto; }
+  .stats-table-wrap table { font-size: 14px; }
+  .stats-table-wrap td, .stats-table-wrap th { padding: 6px 10px; }
+  .legend { display: flex; flex-direction: column; gap: 6px; font-size: 13px; max-height: 240px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 8px; white-space: nowrap; padding-right: 12px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex-shrink: 0; }
+  #pieChart svg { display: block; }
+  @media (max-width: 768px) {
+    .industry-stats { flex-direction: column; }
+    .legend { flex-direction: row; flex-wrap: wrap; max-height: none; }
+  }
   .toolbar { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; align-items: center; }
   .toolbar input, .toolbar select {
     background: #161b22; border: 1px solid #30363d; color: #e6edf3;
@@ -130,6 +143,28 @@ const html = `<!DOCTYPE html>
     <option value="">全部細產業</option>
     ${[...new Set(data.map(d => d['細產業']))].sort().map(i => `<option value="${i}">${i}</option>`).join('')}
   </select>
+</div>
+
+<h2>📊 細產業統計 <span id="indStatsCount" class="count"></span></h2>
+<div class="industry-stats">
+  <div class="pie-wrap">
+    <div id="pieChart"></div>
+  </div>
+  <div class="stats-table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>細產業</th>
+          <th class="num">檔數</th>
+          <th class="num">漲</th>
+          <th class="num">跌</th>
+          <th class="num">平均漲跌幅</th>
+        </tr>
+      </thead>
+      <tbody id="indStatsBody"></tbody>
+    </table>
+  </div>
+  <div id="pieLegend" class="legend"></div>
 </div>
 
 <h2 class="section-up">📈 漲幅榜 <span id="upCount" class="count"></span></h2>
@@ -264,6 +299,69 @@ function render() {
 
   sortAndRender('tblUp', 'tbodyUp', ups, sortState.up);
   sortAndRender('tblDn', 'tbodyDn', dns, sortState.dn);
+  renderIndustryStats(filtered);
+}
+
+const PIE_COLORS = ['#58a6ff','#f85149','#3fb950','#d29922','#a371f7','#f0883e','#79c0ff','#56d364','#ff7b72','#d2a8ff','#ffa657','#ff9aa2','#b1bac4','#f47067','#8b949e'];
+
+function renderIndustryStats(data) {
+  const groups = {};
+  data.forEach(d => {
+    const ind = d['細產業'] || '(未分類)';
+    if (!groups[ind]) groups[ind] = { name: ind, total: 0, ups: 0, dns: 0, count: 0, sumPct: 0 };
+    const g = groups[ind];
+    g.total++;
+    const pct = parseNum(d['漲跌幅']);
+    if (pct !== null) {
+      g.count++;
+      g.sumPct += pct;
+      if (pct > 0) g.ups++;
+      else if (pct < 0) g.dns++;
+    }
+  });
+  const arr = Object.values(groups).sort((a, b) => b.total - a.total);
+  const total = arr.reduce((s, g) => s + g.total, 0);
+  document.getElementById('indStatsCount').textContent = '(' + arr.length + ' 個產業, ' + total + ' 檔)';
+
+  // Pie SVG
+  const cx = 120, cy = 120, r = 105;
+  let cum = -Math.PI / 2;
+  const paths = arr.map((g, i) => {
+    const portion = g.total / total;
+    const sweep = portion * 2 * Math.PI;
+    const x1 = cx + r * Math.cos(cum);
+    const y1 = cy + r * Math.sin(cum);
+    cum += sweep;
+    const x2 = cx + r * Math.cos(cum);
+    const y2 = cy + r * Math.sin(cum);
+    const largeArc = sweep > Math.PI ? 1 : 0;
+    const color = PIE_COLORS[i % PIE_COLORS.length];
+    // 整圈只有一個產業時用整圓 circle 處理
+    if (arr.length === 1) {
+      return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="' + color + '"><title>' + g.name + ': ' + g.total + ' 檔 (100%)</title></circle>';
+    }
+    return '<path d="M ' + cx + ',' + cy + ' L ' + x1.toFixed(2) + ',' + y1.toFixed(2) + ' A ' + r + ',' + r + ' 0 ' + largeArc + ' 1 ' + x2.toFixed(2) + ',' + y2.toFixed(2) + ' Z" fill="' + color + '" stroke="#0e1117" stroke-width="1.5"><title>' + g.name + ': ' + g.total + ' 檔 (' + (portion*100).toFixed(1) + '%)</title></path>';
+  });
+  document.getElementById('pieChart').innerHTML = '<svg viewBox="0 0 240 240" width="240" height="240">' + paths.join('') + '</svg>';
+
+  // Legend
+  document.getElementById('pieLegend').innerHTML = arr.map((g, i) =>
+    '<div class="legend-item"><span class="legend-dot" style="background:' + PIE_COLORS[i % PIE_COLORS.length] + '"></span>' + g.name + ' <b>' + g.total + '</b> (' + ((g.total/total)*100).toFixed(0) + '%)</div>'
+  ).join('');
+
+  // Stats table
+  document.getElementById('indStatsBody').innerHTML = arr.map((g, i) => {
+    const avg = g.count > 0 ? (g.sumPct / g.count) : null;
+    const avgStr = avg !== null ? (avg >= 0 ? '+' : '') + avg.toFixed(2) + '%' : '-';
+    const avgCls = avg === null ? 'flat' : (avg > 0 ? 'up' : (avg < 0 ? 'dn' : 'flat'));
+    return '<tr>' +
+      '<td><span class="legend-dot" style="background:' + PIE_COLORS[i % PIE_COLORS.length] + ';margin-right:6px;vertical-align:middle"></span>' + g.name + '</td>' +
+      '<td class="num">' + g.total + '</td>' +
+      '<td class="num up">' + g.ups + '</td>' +
+      '<td class="num dn">' + g.dns + '</td>' +
+      '<td class="num ' + avgCls + '">' + avgStr + '</td>' +
+    '</tr>';
+  }).join('');
 }
 
 function attachSortHandlers(tableId, stateKey) {
