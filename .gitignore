@@ -41,3 +41,6 @@ test_526.json
 .idea/
 *.swp
 .DS_Store
+
+# wrangler 本機 cache (含 account ID)
+.wrangler/
