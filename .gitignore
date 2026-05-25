@@ -1,0 +1,43 @@
+node_modules/
+*.log
+
+# 探測用的暫存檔 / 過時測試
+hello-cf/
+test_*.js
+test_*.json
+site.html
+response*.html
+tables.js
+main.js
+global.js
+fix_*.js
+fix_*.log
+
+# 早期一次性檔（已被 raw/ + reproc.js 取代）
+scrape.js
+scrape_*.log
+twse_year.json
+twse_5y.json
+twse_all.json
+twse_2001.json
+twse_stock.json
+twse_daily.json
+tpex_2024_2026.json
+tpex_525_to_608.json
+tpex_2007*.json
+tpex_2008*.json
+tpex_2006_test.json
+tpex_now.json
+tpex_may.json
+tpex_may2026.json
+tpex_pricing.html
+tpex_stock_test.json
+tpex_test*.json
+tpex_all.json
+test_526.json
+
+# 編輯器
+.vscode/
+.idea/
+*.swp
+.DS_Store

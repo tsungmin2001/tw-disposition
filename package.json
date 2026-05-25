@@ -1,0 +1,18 @@
+{
+  "name": "tw-disposition-tracker",
+  "version": "1.0.0",
+  "description": "台股處置股每日自動追蹤 - TWSE/TPEX 資料抓取 + 個股價格分析 + 靜態 HTML 生成",
+  "private": true,
+  "scripts": {
+    "daily": "node daily_update.js",
+    "reproc": "node reproc.js",
+    "tomorrow": "node tomorrow_active.js",
+    "industry": "node add_industry.js && node add_sub_industry.js",
+    "render": "node render_html.js",
+    "all": "node daily_update.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
