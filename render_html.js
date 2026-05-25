@@ -145,7 +145,7 @@ const html = `<!DOCTYPE html>
   </select>
 </div>
 
-<h2>📊 細產業統計 <span id="indStatsCount" class="count"></span></h2>
+<h2>📊 次產業統計 <span id="indStatsCount" class="count"></span></h2>
 <div class="industry-stats">
   <div class="pie-wrap">
     <div id="pieChart"></div>
@@ -154,7 +154,7 @@ const html = `<!DOCTYPE html>
     <table class="data-table">
       <thead>
         <tr>
-          <th>細產業</th>
+          <th>次產業</th>
           <th class="num">檔數</th>
           <th class="num">漲</th>
           <th class="num">跌</th>
@@ -307,7 +307,7 @@ const PIE_COLORS = ['#58a6ff','#f85149','#3fb950','#d29922','#a371f7','#f0883e',
 function renderIndustryStats(data) {
   const groups = {};
   data.forEach(d => {
-    const ind = d['細產業'] || '(未分類)';
+    const ind = d['次產業'] || '(未分類)';
     if (!groups[ind]) groups[ind] = { name: ind, total: 0, ups: 0, dns: 0, count: 0, sumPct: 0 };
     const g = groups[ind];
     g.total++;
@@ -321,7 +321,7 @@ function renderIndustryStats(data) {
   });
   const arr = Object.values(groups).sort((a, b) => b.total - a.total);
   const total = arr.reduce((s, g) => s + g.total, 0);
-  document.getElementById('indStatsCount').textContent = '(' + arr.length + ' 個產業, ' + total + ' 檔)';
+  document.getElementById('indStatsCount').textContent = '(' + arr.length + ' 個次產業, ' + total + ' 檔)';
 
   // Pie SVG
   const cx = 120, cy = 120, r = 105;
