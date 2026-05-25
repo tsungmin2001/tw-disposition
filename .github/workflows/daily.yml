@@ -40,3 +40,10 @@ jobs:
             git commit -m "Daily update $(date -u '+%Y-%m-%d %H:%M UTC')"
             git push
           fi
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy public --project-name=tw-disposition --branch=main --commit-message="Daily auto-deploy"
