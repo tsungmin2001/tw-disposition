@@ -43,27 +43,27 @@ const html = `<!DOCTYPE html>
   body {
     margin: 0; padding: 12px 16px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
-    background: #0e1117; color: #e6edf3; font-size: 14px;
+    background: #0e1117; color: #e6edf3; font-size: 16px;
   }
-  h1 { margin: 0 0 4px; font-size: 18px; color: #58a6ff; }
-  .meta { color: #8b949e; font-size: 12px; margin-bottom: 8px; }
-  .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-  .stat { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 6px 12px; font-size: 12px; }
-  .stat .v { font-size: 16px; font-weight: 600; margin-left: 6px; }
+  h1 { margin: 0 0 4px; font-size: 22px; color: #58a6ff; }
+  .meta { color: #8b949e; font-size: 14px; margin-bottom: 10px; }
+  .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .stat { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 8px 14px; font-size: 14px; }
+  .stat .v { font-size: 20px; font-weight: 600; margin-left: 6px; }
   .stat.up .v { color: #f85149; }   /* 台股慣例：紅漲 */
   .stat.dn .v { color: #3fb950; }   /* 台股慣例：綠跌 */
-  h2 { font-size: 16px; margin: 24px 0 8px; padding-left: 12px; border-left: 4px solid #58a6ff; }
+  h2 { font-size: 20px; margin: 28px 0 10px; padding-left: 14px; border-left: 4px solid #58a6ff; }
   h2.section-up { border-left-color: #f85149; color: #f85149; }
   h2.section-dn { border-left-color: #3fb950; color: #3fb950; }
-  h2 .count { color: #8b949e; font-size: 13px; margin-left: 4px; font-weight: normal; }
+  h2 .count { color: #8b949e; font-size: 15px; margin-left: 6px; font-weight: normal; }
   .toolbar { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; align-items: center; }
   .toolbar input, .toolbar select {
     background: #161b22; border: 1px solid #30363d; color: #e6edf3;
-    padding: 6px 10px; border-radius: 6px; font-size: 13px;
+    padding: 8px 12px; border-radius: 6px; font-size: 15px;
   }
-  .toolbar input { width: 200px; }
+  .toolbar input { width: 240px; }
   table { width: 100%; border-collapse: collapse; background: #0d1117; }
-  th, td { padding: 6px 8px; text-align: left; border-bottom: 1px solid #21262d; white-space: nowrap; font-size: 13px; }
+  th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #21262d; white-space: nowrap; font-size: 15px; }
   th { background: #161b22; cursor: pointer; user-select: none; position: sticky; top: 0; z-index: 1; }
   th:hover { background: #1f2733; }
   th.sorted-asc::after { content: " ▲"; color: #58a6ff; }
@@ -73,18 +73,20 @@ const html = `<!DOCTYPE html>
   td.dn { color: #3fb950; font-weight: 600; }   /* 台股慣例：綠跌 */
   td.flat { color: #8b949e; }
   tr:hover td { background: #161b22; }
-  .src-twse { background: #1f6feb33; color: #79c0ff; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-  .src-tpex { background: #a371f733; color: #d2a8ff; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-  .ind { font-size: 11px; color: #c9d1d9; }
-  .subind { font-size: 11px; color: #ffa657; }
-  .period { font-size: 11px; color: #8b949e; }
-  .footer { color: #8b949e; font-size: 11px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #21262d; }
-  .note { background: #1f6feb22; border: 1px solid #1f6feb44; border-radius: 6px; padding: 8px 12px; font-size: 12px; margin-bottom: 12px; color: #c9d1d9; }
+  .src-twse { background: #1f6feb33; color: #79c0ff; padding: 3px 8px; border-radius: 4px; font-size: 13px; }
+  .src-tpex { background: #a371f733; color: #d2a8ff; padding: 3px 8px; border-radius: 4px; font-size: 13px; }
+  .ind { font-size: 13px; color: #c9d1d9; }
+  .subind { font-size: 13px; color: #ffa657; }
+  .period { font-size: 13px; color: #8b949e; }
+  .footer { color: #8b949e; font-size: 13px; margin-top: 20px; padding-top: 14px; border-top: 1px solid #21262d; }
+  .note { background: #1f6feb22; border: 1px solid #1f6feb44; border-radius: 6px; padding: 10px 14px; font-size: 14px; margin-bottom: 14px; color: #c9d1d9; }
   @media (max-width: 768px) {
-    body { padding: 8px; font-size: 12px; }
-    h1 { font-size: 16px; }
+    body { padding: 8px; font-size: 14px; }
+    h1 { font-size: 18px; }
+    h2 { font-size: 17px; }
     .toolbar input { width: 100%; }
-    th, td { padding: 4px 6px; font-size: 11px; }
+    th, td { padding: 6px 8px; font-size: 13px; }
+    .stat .v { font-size: 17px; }
   }
 </style>
 </head>
