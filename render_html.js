@@ -33,10 +33,10 @@ const html = `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-<title>台股處置股看板 - 仍在處置期間 (${data.length} 檔)</title>
+<title>台股看板 - 仍在處置期間 (${data.length} 檔)</title>
 <meta name="description" content="台股上市/上櫃處置股票即時清單，含進處置前收盤、目前收盤、漲跌幅、20日均價、乖離率、細產業分類">
-<meta property="og:title" content="台股處置股看板">
-<meta property="og:description" content="${data.length} 檔處置股 — ${gainers} 漲 ${losers} 跌">
+<meta property="og:title" content="台股看板">
+<meta property="og:description" content="${data.length} 檔仍在處置期間 — ${gainers} 漲 ${losers} 跌">
 <meta property="og:type" content="website">
 <style>
   * { box-sizing: border-box; }
@@ -50,8 +50,8 @@ const html = `<!DOCTYPE html>
   .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
   .stat { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 6px 12px; font-size: 12px; }
   .stat .v { font-size: 16px; font-weight: 600; margin-left: 6px; }
-  .stat.up .v { color: #3fb950; }
-  .stat.dn .v { color: #f85149; }
+  .stat.up .v { color: #f85149; }   /* 台股慣例：紅漲 */
+  .stat.dn .v { color: #3fb950; }   /* 台股慣例：綠跌 */
   .toolbar { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; align-items: center; }
   .toolbar input, .toolbar select {
     background: #161b22; border: 1px solid #30363d; color: #e6edf3;
@@ -65,8 +65,8 @@ const html = `<!DOCTYPE html>
   th.sorted-asc::after { content: " ▲"; color: #58a6ff; }
   th.sorted-desc::after { content: " ▼"; color: #58a6ff; }
   td.num { text-align: right; font-variant-numeric: tabular-nums; }
-  td.up { color: #3fb950; font-weight: 600; }
-  td.dn { color: #f85149; font-weight: 600; }
+  td.up { color: #f85149; font-weight: 600; }   /* 台股慣例：紅漲 */
+  td.dn { color: #3fb950; font-weight: 600; }   /* 台股慣例：綠跌 */
   td.flat { color: #8b949e; }
   tr:hover td { background: #161b22; }
   .src-twse { background: #1f6feb33; color: #79c0ff; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
@@ -86,7 +86,7 @@ const html = `<!DOCTYPE html>
 </head>
 <body>
 
-<h1>📊 台股處置股看板</h1>
+<h1>📊 台股看板</h1>
 <div class="meta">最後產生時間: ${stamp} (台北時間) · 資料截至 ${data[0] ? data[0]['最新日期'] : ''} 收盤 · 共 ${data.length} 檔仍在處置期間</div>
 
 <div class="stats">
