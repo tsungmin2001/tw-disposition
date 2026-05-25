@@ -63,7 +63,7 @@
 <body>
 
 <h1>📊 台股看板</h1>
-<div class="meta">最後產生時間: 2026-05-26 01:13 (台北時間) · 資料截至 115/05/25 收盤 · 共 47 檔仍在處置期間</div>
+<div class="meta">最後產生時間: 2026-05-26 01:15 (台北時間) · 資料截至 115/05/25 收盤 · 共 47 檔仍在處置期間</div>
 
 <div class="stats">
   <div class="stat up">上漲 <span class="v">32</span></div>
@@ -82,7 +82,7 @@
   <input id="search" placeholder="🔍 搜尋代號 / 名稱 / 產業..." />
   <select id="measureFilter">
     <option value="">全部處置措施</option>
-    <option value="5分">5分 撮合</option><option value="10分">10分 撮合</option><option value="20分">20分 撮合</option><option value="25分">25分 撮合</option><option value="60分">60分 撮合</option>
+    <option value="第一次處置 / 5分">第一次處置 / 5分</option><option value="第二次處置 / 20分">第二次處置 / 20分</option><option value="再次處置 / 5分">再次處置 / 5分</option><option value="再次處置 / 20分">再次處置 / 20分</option><option value="再次處置 / 25分">再次處置 / 25分</option><option value="人工管制撮合 / 10分">人工管制撮合 / 10分</option><option value="人工管制撮合 / 60分">人工管制撮合 / 60分</option>
   </select>
   <select id="indFilter">
     <option value="">全部細產業</option>
@@ -207,10 +207,7 @@ function render() {
   const mv = measureF.value;
   const iv = indF.value;
   const filtered = DATA.filter(d => {
-    if (mv) {
-      const mm = (d['處置措施']||'').match(/(d+)分/);
-      if (!mm || (mm[1] + '分') !== mv) return false;
-    }
+    if (mv && d['處置措施'] !== mv) return false;
     if (iv && d['細產業'] !== iv) return false;
     if (q && !(d['代號'].toLowerCase().includes(q) || d['名稱'].toLowerCase().includes(q) || (d['細產業']||'').toLowerCase().includes(q) || (d['次產業']||'').toLowerCase().includes(q))) return false;
     return true;

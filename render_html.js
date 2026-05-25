@@ -112,10 +112,19 @@ const html = `<!DOCTYPE html>
   <input id="search" placeholder="🔍 搜尋代號 / 名稱 / 產業..." />
   <select id="measureFilter">
     <option value="">全部處置措施</option>
-    ${[...new Set(data.map(d => {
-      const m = (d['處置措施']||'').match(/(\d+)分/);
-      return m ? m[1] + '分' : null;
-    }).filter(Boolean))].sort((a,b) => parseInt(a) - parseInt(b)).map(i => `<option value="${i}">${i} 撮合</option>`).join('')}
+    ${[...new Set(data.map(d => d['處置措施']).filter(Boolean))].sort((a, b) => {
+      // 排序：先依「第一次/第二次/再次/督導/人工管制」分組，再依分鐘
+      const order = (s) => {
+        if (/第一次/.test(s)) return 1;
+        if (/第二次/.test(s)) return 2;
+        if (/再次/.test(s)) return 3;
+        if (/督導/.test(s)) return 4;
+        if (/人工管制/.test(s)) return 5;
+        return 9;
+      };
+      const minOf = (s) => { const m = s.match(/(\d+)分/); return m ? parseInt(m[1]) : 0; };
+      return (order(a) - order(b)) || (minOf(a) - minOf(b));
+    }).map(m => `<option value="${m}">${m}</option>`).join('')}
   </select>
   <select id="indFilter">
     <option value="">全部細產業</option>
@@ -240,10 +249,7 @@ function render() {
   const mv = measureF.value;
   const iv = indF.value;
   const filtered = DATA.filter(d => {
-    if (mv) {
-      const mm = (d['處置措施']||'').match(/(\d+)分/);
-      if (!mm || (mm[1] + '分') !== mv) return false;
-    }
+    if (mv && d['處置措施'] !== mv) return false;
     if (iv && d['細產業'] !== iv) return false;
     if (q && !(d['代號'].toLowerCase().includes(q) || d['名稱'].toLowerCase().includes(q) || (d['細產業']||'').toLowerCase().includes(q) || (d['次產業']||'').toLowerCase().includes(q))) return false;
     return true;
