@@ -52,6 +52,10 @@ const html = `<!DOCTYPE html>
   .stat .v { font-size: 16px; font-weight: 600; margin-left: 6px; }
   .stat.up .v { color: #f85149; }   /* 台股慣例：紅漲 */
   .stat.dn .v { color: #3fb950; }   /* 台股慣例：綠跌 */
+  h2 { font-size: 16px; margin: 24px 0 8px; padding-left: 12px; border-left: 4px solid #58a6ff; }
+  h2.section-up { border-left-color: #f85149; color: #f85149; }
+  h2.section-dn { border-left-color: #3fb950; color: #3fb950; }
+  h2 .count { color: #8b949e; font-size: 13px; margin-left: 4px; font-weight: normal; }
   .toolbar { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; align-items: center; }
   .toolbar input, .toolbar select {
     background: #161b22; border: 1px solid #30363d; color: #e6edf3;
@@ -117,8 +121,9 @@ const html = `<!DOCTYPE html>
   </select>
 </div>
 
+<h2 class="section-up">📈 漲幅榜 <span id="upCount" class="count"></span></h2>
 <div style="overflow-x: auto;">
-<table id="tbl">
+<table id="tblUp" class="data-table">
 <thead>
 <tr>
   <th data-key="來源">來源</th>
@@ -135,7 +140,30 @@ const html = `<!DOCTYPE html>
   <th data-key="20MA乖離率" class="num">20MA乖離率</th>
 </tr>
 </thead>
-<tbody id="tbody"></tbody>
+<tbody id="tbodyUp"></tbody>
+</table>
+</div>
+
+<h2 class="section-dn">📉 跌幅榜 <span id="dnCount" class="count"></span></h2>
+<div style="overflow-x: auto;">
+<table id="tblDn" class="data-table">
+<thead>
+<tr>
+  <th data-key="來源">來源</th>
+  <th data-key="代號">代號</th>
+  <th data-key="名稱">名稱</th>
+  <th data-key="細產業">細產業</th>
+  <th data-key="次產業">次產業</th>
+  <th data-key="處置期間">處置期間</th>
+  <th data-key="處置措施">處置措施</th>
+  <th data-key="進處置前收盤" class="num">進處置前收盤</th>
+  <th data-key="最新收盤" class="num">最新收盤</th>
+  <th data-key="漲跌幅" class="num">漲跌幅</th>
+  <th data-key="20日均價" class="num">20日均價</th>
+  <th data-key="20MA乖離率" class="num">20MA乖離率</th>
+</tr>
+</thead>
+<tbody id="tbodyDn"></tbody>
 </table>
 </div>
 
@@ -146,13 +174,15 @@ const html = `<!DOCTYPE html>
 
 <script>
 const DATA = ${JSON.stringify(data)};
-const tbody = document.getElementById('tbody');
 const search = document.getElementById('search');
 const measureF = document.getElementById('measureFilter');
 const indF = document.getElementById('indFilter');
 
-let sortKey = '漲跌幅';
-let sortDesc = true;
+// 兩個表格各自獨立排序狀態
+const sortState = {
+  up: { key: '漲跌幅', desc: true },   // 漲幅榜預設: 漲跌幅 大→小
+  dn: { key: '漲跌幅', desc: false },  // 跌幅榜預設: 漲跌幅 小→大 (最跌的在上)
+};
 
 function parseNum(s) {
   if (s == null || s === '') return null;
@@ -168,11 +198,46 @@ function fmtPctCell(s) {
   return '<td class="num ' + cls + '">' + s + '</td>';
 }
 
+function rowHTML(d) {
+  const srcClass = d['來源'] === 'TWSE' ? 'src-twse' : 'src-tpex';
+  return '<tr>' +
+    '<td><span class="' + srcClass + '">' + d['來源'] + '</span></td>' +
+    '<td><b>' + d['代號'] + '</b></td>' +
+    '<td>' + d['名稱'] + '<br><span class="period">' + (d['處置條件']||'') + '</span></td>' +
+    '<td class="ind">' + (d['細產業']||'') + '</td>' +
+    '<td class="subind">' + (d['次產業']||'') + '</td>' +
+    '<td class="period">' + (d['處置期間']||'') + '</td>' +
+    '<td><span class="period">' + (d['處置措施']||'') + '</span></td>' +
+    '<td class="num">' + (d['進處置前收盤']||'') + '<br><span class="period">' + (d['前一日日期']||'') + '</span></td>' +
+    '<td class="num">' + (d['最新收盤']||'') + '<br><span class="period">' + (d['最新日期']||'') + '</span></td>' +
+    fmtPctCell(d['漲跌幅']) +
+    '<td class="num">' + (d['20日均價']||'') + '</td>' +
+    fmtPctCell(d['20MA乖離率']) +
+    '</tr>';
+}
+
+function sortAndRender(tableId, tbodyId, data, st) {
+  const sorted = [...data].sort((a, b) => {
+    const va = a[st.key], vb = b[st.key];
+    const na = parseNum(va), nb = parseNum(vb);
+    let cmp;
+    if (na !== null && nb !== null) cmp = na - nb;
+    else cmp = String(va||'').localeCompare(String(vb||''));
+    return st.desc ? -cmp : cmp;
+  });
+  document.getElementById(tbodyId).innerHTML = sorted.map(rowHTML).join('');
+  // 更新該表的排序指示
+  document.querySelectorAll('#' + tableId + ' th').forEach(th => {
+    th.classList.remove('sorted-asc', 'sorted-desc');
+    if (th.dataset.key === st.key) th.classList.add(st.desc ? 'sorted-desc' : 'sorted-asc');
+  });
+}
+
 function render() {
   const q = search.value.trim().toLowerCase();
   const mv = measureF.value;
   const iv = indF.value;
-  let filtered = DATA.filter(d => {
+  const filtered = DATA.filter(d => {
     if (mv) {
       const mm = (d['處置措施']||'').match(/(\d+)分/);
       if (!mm || (mm[1] + '分') !== mv) return false;
@@ -182,48 +247,31 @@ function render() {
     return true;
   });
 
-  filtered.sort((a, b) => {
-    const va = a[sortKey], vb = b[sortKey];
-    const na = parseNum(va), nb = parseNum(vb);
-    let cmp;
-    if (na !== null && nb !== null) cmp = na - nb;
-    else cmp = String(va||'').localeCompare(String(vb||''));
-    return sortDesc ? -cmp : cmp;
-  });
+  // 拆成漲幅 / 跌幅 (0% 歸到漲幅末端，多半是今日新公告 pre=current 同價)
+  const ups = filtered.filter(d => (parseNum(d['漲跌幅']) || 0) >= 0);
+  const dns = filtered.filter(d => (parseNum(d['漲跌幅']) || 0) < 0);
 
-  // 更新標頭排序指示
-  document.querySelectorAll('th').forEach(th => {
-    th.classList.remove('sorted-asc', 'sorted-desc');
-    if (th.dataset.key === sortKey) th.classList.add(sortDesc ? 'sorted-desc' : 'sorted-asc');
-  });
+  document.getElementById('upCount').textContent = '(' + ups.length + ')';
+  document.getElementById('dnCount').textContent = '(' + dns.length + ')';
 
-  tbody.innerHTML = filtered.map(d => {
-    const srcClass = d['來源'] === 'TWSE' ? 'src-twse' : 'src-tpex';
-    return '<tr>' +
-      '<td><span class="' + srcClass + '">' + d['來源'] + '</span></td>' +
-      '<td><b>' + d['代號'] + '</b></td>' +
-      '<td>' + d['名稱'] + '<br><span class="period">' + (d['處置條件']||'') + '</span></td>' +
-      '<td class="ind">' + (d['細產業']||'') + '</td>' +
-      '<td class="subind">' + (d['次產業']||'') + '</td>' +
-      '<td class="period">' + (d['處置期間']||'') + '</td>' +
-      '<td><span class="period">' + (d['處置措施']||'') + '</span></td>' +
-      '<td class="num">' + (d['進處置前收盤']||'') + '<br><span class="period">' + (d['前一日日期']||'') + '</span></td>' +
-      '<td class="num">' + (d['最新收盤']||'') + '<br><span class="period">' + (d['最新日期']||'') + '</span></td>' +
-      fmtPctCell(d['漲跌幅']) +
-      '<td class="num">' + (d['20日均價']||'') + '</td>' +
-      fmtPctCell(d['20MA乖離率']) +
-      '</tr>';
-  }).join('');
+  sortAndRender('tblUp', 'tbodyUp', ups, sortState.up);
+  sortAndRender('tblDn', 'tbodyDn', dns, sortState.dn);
 }
 
-document.querySelectorAll('th').forEach(th => {
-  th.addEventListener('click', () => {
-    const k = th.dataset.key;
-    if (sortKey === k) sortDesc = !sortDesc;
-    else { sortKey = k; sortDesc = true; }
-    render();
+function attachSortHandlers(tableId, stateKey) {
+  document.querySelectorAll('#' + tableId + ' th').forEach(th => {
+    th.addEventListener('click', () => {
+      const k = th.dataset.key;
+      const st = sortState[stateKey];
+      if (st.key === k) st.desc = !st.desc;
+      else { st.key = k; st.desc = (stateKey === 'up'); }
+      render();
+    });
   });
-});
+}
+
+attachSortHandlers('tblUp', 'up');
+attachSortHandlers('tblDn', 'dn');
 
 search.addEventListener('input', render);
 measureF.addEventListener('change', render);

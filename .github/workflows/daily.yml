@@ -38,7 +38,12 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Daily update $(date -u '+%Y-%m-%d %H:%M UTC')"
-            git push
+            # 處理併發：若 remote 有新 commit，rebase 後再 push (retry 3 次)
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push && break
+              echo "Push attempt $i failed, retrying..."
+              sleep 5
+            done
           fi
 
       - name: Deploy to Cloudflare Pages
