@@ -29,7 +29,7 @@ export async function onRequest({ request }) {
     return new Response(JSON.stringify({
       inMarket: false,
       taipei: taipei.toISOString(),
-      message: '非盤中時段 (09:00-13:35 台北週一至五)',
+      message: '非盤中時段 (09:00-20:59 台北週一至五，盤後仍可顯示當日收盤)',
       quotes: {},
     }), {
       headers: { ...corsHeaders, 'Cache-Control': 'public, s-maxage=600, max-age=60' }
