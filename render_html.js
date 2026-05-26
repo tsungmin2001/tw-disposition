@@ -36,7 +36,7 @@ const html = `<!DOCTYPE html>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>台股看板 - 仍在處置期間 (${data.length} 檔)</title>
+<title>飆股 - 仍在處置期間 ${data.length} 檔 | 飆神</title>
 <meta name="description" content="台股上市/上櫃處置股票即時清單，含進處置前收盤、目前收盤、漲跌幅、20日均價、乖離率、細產業分類">
 <meta property="og:title" content="台股看板">
 <meta property="og:description" content="${data.length} 檔仍在處置期間 — ${gainers} 漲 ${losers} 跌">
@@ -49,6 +49,10 @@ const html = `<!DOCTYPE html>
     background: #0e1117; color: #e6edf3; font-size: 16px;
   }
   h1 { margin: 0 0 4px; font-size: 22px; color: #58a6ff; }
+  .topnav { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .navlink { padding: 6px 14px; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9; text-decoration: none; font-size: 14px; background: #161b22; }
+  .navlink:hover { border-color: #58a6ff; color: #58a6ff; }
+  .navlink.active { background: #f85149; border-color: #f85149; color: white; }
   .meta { color: #8b949e; font-size: 14px; margin-bottom: 10px; }
   .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
   .stat { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 8px 14px; font-size: 14px; }
@@ -97,7 +101,12 @@ const html = `<!DOCTYPE html>
 </head>
 <body>
 
-<h1>📊 台股看板</h1>
+<nav class="topnav">
+  <a href="/" class="navlink">← 主頁</a>
+  <a href="/stocks.html" class="navlink active">📈 飆股</a>
+  <a href="/analysis.html" class="navlink">🔍 盤後分析</a>
+</nav>
+<h1>📈 飆股 <span style="font-size:14px;color:#8b949e;font-weight:400">仍在處置期間</span></h1>
 <div class="meta">最後產生時間: ${stamp} (台北時間) · 資料截至 ${data[0] ? data[0]['最新日期'] : ''} 收盤 · 共 ${data.length} 檔仍在處置期間</div>
 <div id="liveStatus" class="meta">⏳ 連接即時報價...</div>
 
@@ -371,8 +380,8 @@ setInterval(fetchQuotes, 5 * 60 * 1000);  // 之後每 5 分鐘 (對應撮合間
 </html>
 `;
 
-fs.writeFileSync(path.join(PUBLIC_DIR, 'index.html'), html, 'utf8');
-console.log('Wrote', path.join(PUBLIC_DIR, 'index.html'));
+fs.writeFileSync(path.join(PUBLIC_DIR, 'stocks.html'), html, 'utf8');
+console.log('Wrote', path.join(PUBLIC_DIR, 'stocks.html'));
 console.log('File size:', (fs.statSync(path.join(PUBLIC_DIR, 'index.html')).size / 1024).toFixed(1) + ' KB');
 console.log('Rows:', data.length);
 

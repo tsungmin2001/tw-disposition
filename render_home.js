@@ -1,4 +1,22 @@
-<!DOCTYPE html>
+'use strict';
+const fs = require('fs');
+const path = require('path');
+
+const PUBLIC_DIR = path.join(__dirname, 'public');
+if (!fs.existsSync(PUBLIC_DIR)) fs.mkdirSync(PUBLIC_DIR, { recursive: true });
+
+// 取現有 active 檔數
+let activeCount = 54;
+try {
+  const tx = fs.readFileSync(path.join(__dirname, 'tomorrow_active.txt'), 'utf8').replace(/^﻿/, '');
+  activeCount = tx.split('\n').filter(Boolean).length - 1;
+} catch (e) {}
+
+const now = new Date();
+const taipei = new Date(now.getTime() + 8 * 3600 * 1000);
+const stamp = taipei.toISOString().replace('T', ' ').slice(0, 16);
+
+const html = `<!DOCTYPE html>
 <html lang="zh-Hant-TW">
 <head>
 <meta charset="UTF-8">
@@ -7,7 +25,7 @@
 <title>飆神 | 台股處置看板</title>
 <meta name="description" content="台股飆股/處置股每日自動追蹤 - 進處置漲跌幅、20MA乖離率、盤後漲停產業分析">
 <meta property="og:title" content="飆神 | 台股處置看板">
-<meta property="og:description" content="每日自動追蹤 54 檔處置中飆股 + 盤後漲停產業分析">
+<meta property="og:description" content="每日自動追蹤 ${activeCount} 檔處置中飆股 + 盤後漲停產業分析">
 <meta property="og:type" content="website">
 <style>
   * { box-sizing: border-box; }
@@ -131,7 +149,7 @@
 <body>
 
 <div class="page">
-  <div class="meta">最後產生時間: 2026-05-27 00:21 (台北時間) · 仍在處置期間 54 檔</div>
+  <div class="meta">最後產生時間: ${stamp} (台北時間) · 仍在處置期間 ${activeCount} 檔</div>
 
   <div class="hub">
     <div class="orbit-ring"></div>
@@ -143,7 +161,7 @@
     <a href="/stocks.html" class="menu-card" style="--angle: 315deg">
       <div class="icon">📈</div>
       <div class="label">飆股清單</div>
-      <div class="desc">處置中個股<br>54 檔即時追蹤</div>
+      <div class="desc">處置中個股<br>${activeCount} 檔即時追蹤</div>
     </a>
 
     <a href="/analysis.html" class="menu-card" style="--angle: 45deg">
@@ -174,3 +192,8 @@
 
 </body>
 </html>
+`;
+
+fs.writeFileSync(path.join(PUBLIC_DIR, 'index.html'), html, 'utf8');
+console.log('Wrote', path.join(PUBLIC_DIR, 'index.html'));
+console.log('File size:', (fs.statSync(path.join(PUBLIC_DIR, 'index.html')).size / 1024).toFixed(1) + ' KB');
