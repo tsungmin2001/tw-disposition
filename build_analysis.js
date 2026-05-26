@@ -8,7 +8,8 @@ const https = require('https');
 
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36';
-const LIMIT_UP_THRESHOLD = 9.5;   // 漲停: 漲跌幅 >= 9.5%
+// 漲停定義: 觸及交易所 +10% 上限。考慮 tick 取整 (1元以下0.01, 10-49.95用0.05, 100-499.5用0.5...) 後實際漲幅可能略低於 10%，採 +9.8% 為門檻。
+const LIMIT_UP_THRESHOLD = 9.8;
 
 if (!fs.existsSync(PUBLIC_DIR)) fs.mkdirSync(PUBLIC_DIR, { recursive: true });
 
@@ -274,7 +275,7 @@ async function fetchTpexDaily() {
 </nav>
 
 <h1>🔍 盤後分析 <span style="font-size:14px;color:#8b949e;font-weight:400">當日漲停產業熱度</span></h1>
-<div class="meta">產生時間: ${taipeiTime} (台北) · 漲停定義: 漲跌幅 ≥ ${LIMIT_UP_THRESHOLD}% · 涵蓋 TWSE 上市 + TPEX 上櫃普通股</div>
+<div class="meta">產生時間: ${taipeiTime} (台北) · 資料日: ${ymd(TODAY)} · 觸及 +10% 漲停板 (門檻 ≥${LIMIT_UP_THRESHOLD}% 含 tick 取整誤差) · TWSE 上市 + TPEX 上櫃普通股</div>
 
 <div class="stats">
   <div class="stat">漲停總數 <span class="v">${limitUp.length}</span></div>
@@ -319,7 +320,7 @@ ${indArr.map(g => {
 
 <div class="footer">
   資料來源: TWSE MI_INDEX 每日收盤行情 + TPEX dailyQuotes · 產業分類: TWSE/TPEX OpenAPI 公司基本資料
-  <br>漲停定義: 漲跌幅 ≥ ${LIMIT_UP_THRESHOLD}% (含部分接近漲停的股票) · 排除權證、ETF、可轉債
+  <br>漲停定義: 觸及 +10% 漲停板上限。實務上 tick 取整後實際漲幅介於 +9.80% ~ +10.00%，故門檻設 ≥${LIMIT_UP_THRESHOLD}% · 排除權證、ETF、可轉債、興櫃
   <br>本資料僅供研究參考，不構成投資建議
 </div>
 
