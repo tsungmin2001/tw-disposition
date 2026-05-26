@@ -199,7 +199,7 @@ async function ensurePrices(equity) {
 // ===== Step 4: chain downstream scripts =====
 function runDownstream() {
   const env = { ...process.env, TARGET_DATE: TARGET_ROC, MONTHS: `${PREV_YM},${CURRENT_YM}` };
-  for (const script of ['reproc.js', 'tomorrow_active.js', 'add_industry.js', 'add_sub_industry.js', 'render_html.js']) {
+  for (const script of ['reproc.js', 'tomorrow_active.js', 'add_industry.js', 'add_sub_industry.js', 'render_html.js', 'render_home.js', 'build_analysis.js']) {
     console.log(`\n[downstream] node ${script}`);
     execSync(`node ${script}`, { stdio: 'inherit', cwd: ROOT, env });
   }
