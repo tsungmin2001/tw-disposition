@@ -364,7 +364,7 @@ async function fetchQuotes() {
 
 render();
 fetchQuotes();          // 首次載入立刻抓一次
-setInterval(fetchQuotes, 60 * 1000);  // 之後每 60 秒
+setInterval(fetchQuotes, 5 * 60 * 1000);  // 之後每 5 分鐘 (對應撮合間隔)
 </script>
 
 </body>
