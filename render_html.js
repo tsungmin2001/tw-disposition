@@ -33,6 +33,9 @@ const html = `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>台股看板 - 仍在處置期間 (${data.length} 檔)</title>
 <meta name="description" content="台股上市/上櫃處置股票即時清單，含進處置前收盤、目前收盤、漲跌幅、20日均價、乖離率、細產業分類">
 <meta property="og:title" content="台股看板">
@@ -56,6 +59,8 @@ const html = `<!DOCTYPE html>
   h2.section-up { border-left-color: #f85149; color: #f85149; }
   h2.section-dn { border-left-color: #3fb950; color: #3fb950; }
   h2 .count { color: #8b949e; font-size: 15px; margin-left: 6px; font-weight: normal; }
+  .live { color: #f0883e; font-weight: 600; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
   .toolbar { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; align-items: center; }
   .toolbar input, .toolbar select {
     background: #161b22; border: 1px solid #30363d; color: #e6edf3;
@@ -94,6 +99,7 @@ const html = `<!DOCTYPE html>
 
 <h1>📊 台股看板</h1>
 <div class="meta">最後產生時間: ${stamp} (台北時間) · 資料截至 ${data[0] ? data[0]['最新日期'] : ''} 收盤 · 共 ${data.length} 檔仍在處置期間</div>
+<div id="liveStatus" class="meta">⏳ 連接即時報價...</div>
 
 <div class="stats">
   <div class="stat up">上漲 <span class="v">${gainers}</span></div>
@@ -211,8 +217,41 @@ function fmtPctCell(s) {
   return '<td class="num ' + cls + '">' + s + '</td>';
 }
 
+// 盤中即時報價 (由 /api/quotes 填入)
+const QUOTES = {};
+
+function fmtNum(n, dp = 2) {
+  if (n == null || isNaN(n)) return '';
+  return Number(n).toFixed(dp);
+}
+
 function rowHTML(d) {
   const srcClass = d['來源'] === 'TWSE' ? 'src-twse' : 'src-tpex';
+  const q = QUOTES[d['代號']];
+  // 若盤中有即時報價，覆蓋價格相關欄位
+  let curPrice, curDateLabel, dayChangePct, changePct, biasPct;
+  if (q && q.price != null) {
+    curPrice = fmtNum(q.price);
+    curDateLabel = '<span class="live">● 盤中 ' + (q.time||'') + '</span>';
+    dayChangePct = (q.dayChange != null) ? (q.dayChange >= 0 ? '+' : '') + q.dayChange.toFixed(2) + '%' : '';
+    const preC = parseFloat(d['進處置前收盤']);
+    if (preC) {
+      const v = (q.price - preC) / preC * 100;
+      changePct = (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
+    } else changePct = d['漲跌幅'] || '';
+    const m20 = parseFloat(d['20日均價']);
+    if (m20) {
+      const v = (q.price - m20) / m20 * 100;
+      biasPct = (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
+    } else biasPct = d['20MA乖離率'] || '';
+  } else {
+    curPrice = d['最新收盤'] || '';
+    curDateLabel = '<span class="period">' + (d['最新日期']||'') + '</span>';
+    dayChangePct = d['當日漲跌幅'] || '';
+    changePct = d['漲跌幅'] || '';
+    biasPct = d['20MA乖離率'] || '';
+  }
+
   return '<tr>' +
     '<td><span class="' + srcClass + '">' + d['來源'] + '</span></td>' +
     '<td><b>' + d['代號'] + '</b></td>' +
@@ -222,11 +261,11 @@ function rowHTML(d) {
     '<td class="period">' + (d['處置期間']||'') + '</td>' +
     '<td><span class="period">' + (d['處置措施']||'') + '</span></td>' +
     '<td class="num">' + (d['進處置前收盤']||'') + '<br><span class="period">' + (d['前一日日期']||'') + '</span></td>' +
-    '<td class="num">' + (d['最新收盤']||'') + '<br><span class="period">' + (d['最新日期']||'') + '</span></td>' +
-    fmtPctCell(d['當日漲跌幅']) +
-    fmtPctCell(d['漲跌幅']) +
+    '<td class="num">' + curPrice + '<br>' + curDateLabel + '</td>' +
+    fmtPctCell(dayChangePct) +
+    fmtPctCell(changePct) +
     '<td class="num">' + (d['20日均價']||'') + '</td>' +
-    fmtPctCell(d['20MA乖離率']) +
+    fmtPctCell(biasPct) +
     '</tr>';
 }
 
@@ -288,7 +327,43 @@ search.addEventListener('input', render);
 measureF.addEventListener('change', render);
 indF.addEventListener('change', render);
 
+// ===== 盤中即時報價 (每 60 秒) =====
+function isMarketHoursClient() {
+  const now = new Date(Date.now() + 8 * 3600 * 1000); // 台北
+  const day = now.getUTCDay();
+  if (day === 0 || day === 6) return false;
+  const mins = now.getUTCHours() * 60 + now.getUTCMinutes();
+  return mins >= 9 * 60 && mins <= 13 * 60 + 35;
+}
+
+async function fetchQuotes() {
+  try {
+    const res = await fetch('/api/quotes?_=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const d = await res.json();
+    if (d.quotes) {
+      Object.keys(d.quotes).forEach(k => { QUOTES[k] = d.quotes[k]; });
+    }
+    const el = document.getElementById('liveStatus');
+    if (el) {
+      if (d.inMarket && d.updated) {
+        const t = new Date(d.updated);
+        el.innerHTML = '<span class="live">● 盤中即時</span> 最後更新 ' + t.toLocaleTimeString('zh-TW', { hour12: false }) + ' · ' + d.count + ' 檔';
+      } else {
+        el.innerHTML = '<span class="period">○ 非盤中時段 (顯示昨日收盤)</span>';
+      }
+    }
+    render();
+  } catch (e) {
+    console.error('fetchQuotes failed:', e);
+    const el = document.getElementById('liveStatus');
+    if (el) el.innerHTML = '<span class="period">⚠ 即時報價暫無法取得 (' + e.message + ')</span>';
+  }
+}
+
 render();
+fetchQuotes();          // 首次載入立刻抓一次
+setInterval(fetchQuotes, 60 * 1000);  // 之後每 60 秒
 </script>
 
 </body>
@@ -299,3 +374,19 @@ fs.writeFileSync(path.join(PUBLIC_DIR, 'index.html'), html, 'utf8');
 console.log('Wrote', path.join(PUBLIC_DIR, 'index.html'));
 console.log('File size:', (fs.statSync(path.join(PUBLIC_DIR, 'index.html')).size / 1024).toFixed(1) + ' KB');
 console.log('Rows:', data.length);
+
+// 另外輸出 data/active.json 供盤中 Function 使用
+const DATA_DIR = path.join(PUBLIC_DIR, 'data');
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+const activeJson = {
+  generated: new Date().toISOString(),
+  stocks: data.map(r => ({
+    source: r['來源'],
+    code: r['代號'],
+    name: r['名稱'],
+    preClose: parseFloat(r['進處置前收盤']) || null,
+    ma20: parseFloat(r['20日均價']) || null,
+  })),
+};
+fs.writeFileSync(path.join(DATA_DIR, 'active.json'), JSON.stringify(activeJson));
+console.log('Wrote data/active.json (' + activeJson.stocks.length + ' stocks)');
