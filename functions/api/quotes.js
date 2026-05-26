@@ -8,10 +8,12 @@ const UA = 'Mozilla/5.0 (compatible; Cloudflare-Pages-Function/1.0)';
 function taipeiNow() { return new Date(Date.now() + 8 * 3600 * 1000); }
 
 function isMarketHours(d) {
-  const day = d.getUTCDay();              // 0=Sun, 6=Sat
+  // 週一至五 9:00-20:59 (盤中即時 + 盤後 MIS 仍能取到當日收盤)
+  // 21:00 之後讓 daily cron 處理
+  const day = d.getUTCDay();
   if (day === 0 || day === 6) return false;
   const minutes = d.getUTCHours() * 60 + d.getUTCMinutes();
-  return minutes >= 9 * 60 && minutes <= 13 * 60 + 35;   // 09:00-13:35
+  return minutes >= 9 * 60 && minutes < 21 * 60;
 }
 
 export async function onRequest({ request }) {

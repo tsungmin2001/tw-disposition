@@ -329,11 +329,12 @@ indF.addEventListener('change', render);
 
 // ===== 盤中即時報價 (每 60 秒) =====
 function isMarketHoursClient() {
-  const now = new Date(Date.now() + 8 * 3600 * 1000); // 台北
+  // 同 backend: 週一至五 9:00-20:59
+  const now = new Date(Date.now() + 8 * 3600 * 1000);
   const day = now.getUTCDay();
   if (day === 0 || day === 6) return false;
   const mins = now.getUTCHours() * 60 + now.getUTCMinutes();
-  return mins >= 9 * 60 && mins <= 13 * 60 + 35;
+  return mins >= 9 * 60 && mins < 21 * 60;
 }
 
 async function fetchQuotes() {
