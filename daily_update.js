@@ -30,17 +30,23 @@ function ymd(d) { return d.getUTCFullYear() + '/' + String(d.getUTCMonth() + 1).
 function ymdCompact(d) { return d.getUTCFullYear() + String(d.getUTCMonth() + 1).padStart(2, '0') + String(d.getUTCDate()).padStart(2, '0'); }
 
 const TODAY = taipeiNow();
-const TOMORROW = addDays(TODAY, 1);
 const CURRENT_YEAR = TODAY.getUTCFullYear();
 const CURRENT_YM = ymOf(TODAY);
 const PREV_MONTH_DATE = new Date(Date.UTC(TODAY.getUTCFullYear(), TODAY.getUTCMonth() - 1, 1));
 const PREV_YM = ymOf(PREV_MONTH_DATE);
-const TARGET_ROC = rocOf(TOMORROW);
+
+// 決定要顯示「哪個交易日」的 active list (對 GitHub cron 延遲更穩健)
+//   現在 >= 14:00 台北 (已過收盤) → 顯示「下一交易日」(隔天，盤後準備)
+//   現在 <  14:00 台北 (盤前/盤中/延遲到午夜後) → 顯示「當日」
+// 這樣即使 cron 延遲到午夜後才跑，也不會誤跳一天。
+const HOUR_TAIPEI = TODAY.getUTCHours();
+const TARGET_DAY = HOUR_TAIPEI >= 14 ? addDays(TODAY, 1) : TODAY;
+const TARGET_ROC = rocOf(TARGET_DAY);
 const FUTURE_END_PLUS30 = addDays(TODAY, 30);
 
 console.log('=== Daily update started ===');
-console.log('Today (Taipei):', rocOf(TODAY));
-console.log('Tomorrow (Taipei):', TARGET_ROC);
+console.log('Now (Taipei):', rocOf(TODAY), HOUR_TAIPEI + ':xx');
+console.log('Target trading day:', TARGET_ROC, '(' + (HOUR_TAIPEI >= 14 ? '盤後→下一日' : '盤前/午夜→當日') + ')');
 console.log('Current month:', CURRENT_YM, '| Previous month:', PREV_YM);
 
 // ===== HTTP =====

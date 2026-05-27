@@ -44,3 +44,5 @@ test_526.json
 
 # wrangler 本機 cache (含 account ID)
 .wrangler/
+twse_526.json
+tpex_526.json
