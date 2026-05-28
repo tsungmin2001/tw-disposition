@@ -90,7 +90,7 @@ const html = `<!DOCTYPE html>
     top: 50%; left: 50%;
     width: min(180px, 26vw);
     height: min(130px, 19vw);
-    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(min(-280px, -39vw)) rotate(calc(-1 * var(--angle)));
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(max(-280px, -39vw)) rotate(calc(-1 * var(--angle)));
     background: linear-gradient(135deg, rgba(22, 27, 34, 0.92), rgba(15, 20, 30, 0.92));
     border: 1px solid #30363d;
     border-radius: 14px;
@@ -105,7 +105,7 @@ const html = `<!DOCTYPE html>
   .menu-card .label { font-size: min(16px, 2.6vw); font-weight: 700; margin-bottom: 4px; }
   .menu-card .desc { font-size: min(11px, 1.8vw); color: #8b949e; text-align: center; line-height: 1.3; }
   .menu-card:hover {
-    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(min(-300px, -42vw)) rotate(calc(-1 * var(--angle))) scale(1.08);
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(max(-300px, -42vw)) rotate(calc(-1 * var(--angle))) scale(1.08);
     border-color: #f85149;
     box-shadow: 0 8px 24px rgba(248, 81, 73, 0.4);
     z-index: 5;
