@@ -270,8 +270,9 @@ async function fetchTpexDay(date) {
     const avg5dVolLots = mean(last5.map(c => c.volLots || 0));
     const avg5dTurnover = mean(last5.map(c => c.turnover || 0));
 
+    const ma20Bias = (today.close - ma20Today) / ma20Today * 100;
     return {
-      maxDailyGain, maxDailyGainDate, maGrowth, ma20Today, ma20Slope,
+      maxDailyGain, maxDailyGainDate, maGrowth, ma20Today, ma20Slope, ma20Bias,
       tenDayGain, tenAgoClose: tenAgo.close, tenAgoDate: tenAgo.date,
       currentClose: today.close, currentDate: today.date,
       avg5dVolLots, avg5dTurnover,
@@ -450,6 +451,7 @@ ${topInd ? `<div class="insight">💡 主要集中在 <b style="color:#f85149">$
   <th class="num">10日漲幅</th>
   <th class="num">MA20斜率<br>(元/日)</th>
   <th class="num">MA20成長<br>(5日%)</th>
+  <th class="num">MA20乖離率</th>
   <th class="num">20日最大<br>單日漲</th>
   <th class="num">5日均量<br>(張)</th>
   <th class="num">5日均成交額<br>(億元)</th>
@@ -475,6 +477,7 @@ ${results.map(r => {
     '<td class="num up">+' + r.tenDayGain.toFixed(2) + '%</td>' +
     '<td class="num ' + slopeCls + '">' + slopeStr + '</td>' +
     '<td class="num up">+' + r.maGrowth.toFixed(2) + '%</td>' +
+    '<td class="num ' + (r.ma20Bias >= 0 ? 'up' : 'dn') + '">' + (r.ma20Bias >= 0 ? '+' : '') + r.ma20Bias.toFixed(2) + '%</td>' +
     '<td class="num up">+' + r.maxDailyGain.toFixed(2) + '%<br><span class="ind">' + dailyGainDate + '</span></td>' +
     '<td class="num">' + volStr + '</td>' +
     '<td class="num">' + turnoverStr + '</td>' +
