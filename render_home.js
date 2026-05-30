@@ -170,10 +170,10 @@ const html = `<!DOCTYPE html>
       <div class="desc">當日漲停股<br>產業熱度統計</div>
     </a>
 
-    <a class="menu-card coming-soon" style="--angle: 225deg">
-      <div class="icon">⭐</div>
-      <div class="label">自選股</div>
-      <div class="desc">Coming soon</div>
+    <a href="/screen.html" class="menu-card" style="--angle: 225deg">
+      <div class="icon">🎯</div>
+      <div class="label">飆股篩選</div>
+      <div class="desc">3 條件全市場掃描<br>單日漲9% + MA20上揚 + 10日+20%</div>
     </a>
 
     <a class="menu-card coming-soon" style="--angle: 135deg">

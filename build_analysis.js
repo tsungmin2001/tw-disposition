@@ -270,8 +270,9 @@ async function fetchTpexDaily() {
 
 <nav class="topnav">
   <a href="/" class="navlink">← 主頁</a>
-  <a href="/stocks.html" class="navlink">📈 飆股</a>
+  <a href="/stocks.html" class="navlink">📈 飆股(處置)</a>
   <a href="/analysis.html" class="navlink active">🔍 盤後分析</a>
+  <a href="/screen.html" class="navlink">🎯 飆股篩選</a>
 </nav>
 
 <h1>🔍 盤後分析 <span style="font-size:14px;color:#8b949e;font-weight:400">當日漲停產業熱度</span></h1>

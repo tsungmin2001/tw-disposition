@@ -103,8 +103,9 @@ const html = `<!DOCTYPE html>
 
 <nav class="topnav">
   <a href="/" class="navlink">← 主頁</a>
-  <a href="/stocks.html" class="navlink active">📈 飆股</a>
+  <a href="/stocks.html" class="navlink active">📈 飆股(處置)</a>
   <a href="/analysis.html" class="navlink">🔍 盤後分析</a>
+  <a href="/screen.html" class="navlink">🎯 飆股篩選</a>
 </nav>
 <h1>📈 飆股 <span style="font-size:14px;color:#8b949e;font-weight:400">仍在處置期間</span></h1>
 <div class="meta">最後產生時間: ${stamp} (台北時間) · 資料截至 ${data[0] ? data[0]['最新日期'] : ''} 收盤 · 共 ${data.length} 檔仍在處置期間</div>
