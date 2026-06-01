@@ -110,19 +110,35 @@ async function refreshRaw() {
 
   await sleep(SLEEP_MS);
 
-  // TWSE company basic info (for industry classification)
+  // TWSE company basic info (容錯: 失敗用上次快取)
   console.log(`\n[3/4] Refreshing TWSE company info (產業別 lookup)...`);
-  const twseComp = await fetchJson('https://openapi.twse.com.tw/v1/opendata/t187ap03_L', 'https://openapi.twse.com.tw/', 'TWSE companies');
-  fs.writeFileSync(path.join(ROOT, 'twse_companies.json'), JSON.stringify(twseComp));
-  console.log(`  saved twse_companies.json (${twseComp.length} companies)`);
+  try {
+    const twseComp = await fetchJson('https://openapi.twse.com.tw/v1/opendata/t187ap03_L', 'https://openapi.twse.com.tw/', 'TWSE companies');
+    fs.writeFileSync(path.join(ROOT, 'twse_companies.json'), JSON.stringify(twseComp));
+    console.log(`  saved twse_companies.json (${twseComp.length} companies)`);
+  } catch (e) {
+    console.log(`  ! TWSE companies fetch failed: ${e.message} → 用上次快取繼續`);
+    if (!fs.existsSync(path.join(ROOT, 'twse_companies.json'))) {
+      console.log(`  ! 無快取可用，使用空陣列`);
+      fs.writeFileSync(path.join(ROOT, 'twse_companies.json'), '[]');
+    }
+  }
 
   await sleep(SLEEP_MS);
 
-  // TPEX company basic info
+  // TPEX company basic info (容錯同上)
   console.log(`\n[4/4] Refreshing TPEX company info...`);
-  const tpexComp = await fetchJson('https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O', 'https://www.tpex.org.tw/openapi/', 'TPEX companies');
-  fs.writeFileSync(path.join(ROOT, 'tpex_companies.json'), JSON.stringify(tpexComp));
-  console.log(`  saved tpex_companies.json (${tpexComp.length} companies)`);
+  try {
+    const tpexComp = await fetchJson('https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O', 'https://www.tpex.org.tw/openapi/', 'TPEX companies');
+    fs.writeFileSync(path.join(ROOT, 'tpex_companies.json'), JSON.stringify(tpexComp));
+    console.log(`  saved tpex_companies.json (${tpexComp.length} companies)`);
+  } catch (e) {
+    console.log(`  ! TPEX companies fetch failed: ${e.message} → 用上次快取繼續`);
+    if (!fs.existsSync(path.join(ROOT, 'tpex_companies.json'))) {
+      console.log(`  ! 無快取可用，使用空陣列`);
+      fs.writeFileSync(path.join(ROOT, 'tpex_companies.json'), '[]');
+    }
+  }
 }
 
 // ===== Step 2: identify active stocks =====
