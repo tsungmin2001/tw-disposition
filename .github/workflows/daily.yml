@@ -33,7 +33,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add raw/ prices/ public/ disposition_stocks.txt tomorrow_active.txt active_list.tsv twse_companies.json tpex_companies.json 2>/dev/null || true
+          git add raw/ prices/ public/ data/ disposition_stocks.txt tomorrow_active.txt active_list.tsv twse_companies.json tpex_companies.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else

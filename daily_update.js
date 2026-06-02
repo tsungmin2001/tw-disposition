@@ -227,6 +227,16 @@ function runDownstream() {
   }
 }
 
+// ===== 全域 error handlers (避免靜默退出) =====
+process.on('unhandledRejection', (reason) => {
+  console.error('UNHANDLED REJECTION:', reason);
+  process.exit(2);
+});
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION:', err);
+  process.exit(3);
+});
+
 // ===== Main =====
 (async () => {
   try {
