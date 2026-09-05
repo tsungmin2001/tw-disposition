@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-09-02T17:01:40.069Z",
+  "lastUpdate": "2026-09-05T15:47:35.609Z",
   "stocks": {
     "1303": {
       "firstMatchDate": "2026-09-02"
@@ -16,17 +16,20 @@
     "2351": {
       "firstMatchDate": "2026-08-28"
     },
+    "2421": {
+      "firstMatchDate": "2026-09-04"
+    },
+    "2426": {
+      "firstMatchDate": "2026-09-04"
+    },
     "2455": {
       "firstMatchDate": "2026-09-02"
     },
     "2489": {
       "firstMatchDate": "2026-08-28"
     },
-    "2615": {
-      "firstMatchDate": "2026-08-18"
-    },
-    "3008": {
-      "firstMatchDate": "2026-08-18"
+    "3017": {
+      "firstMatchDate": "2026-09-04"
     },
     "3081": {
       "firstMatchDate": "2026-08-28"
@@ -34,14 +37,17 @@
     "3105": {
       "firstMatchDate": "2026-09-02"
     },
+    "3141": {
+      "firstMatchDate": "2026-09-04"
+    },
     "3324": {
       "firstMatchDate": "2026-09-02"
     },
+    "3363": {
+      "firstMatchDate": "2026-09-04"
+    },
     "3374": {
       "firstMatchDate": "2026-09-02"
-    },
-    "3406": {
-      "firstMatchDate": "2026-08-18"
     },
     "3441": {
       "firstMatchDate": "2026-08-28"
@@ -55,9 +61,6 @@
     "4977": {
       "firstMatchDate": "2026-09-02"
     },
-    "5475": {
-      "firstMatchDate": "2026-08-18"
-    },
     "6173": {
       "firstMatchDate": "2026-09-02"
     },
@@ -67,11 +70,17 @@
     "6217": {
       "firstMatchDate": "2026-09-02"
     },
+    "6271": {
+      "firstMatchDate": "2026-09-04"
+    },
+    "6290": {
+      "firstMatchDate": "2026-09-04"
+    },
     "6451": {
       "firstMatchDate": "2026-09-02"
     },
-    "6672": {
-      "firstMatchDate": "2026-08-18"
+    "6510": {
+      "firstMatchDate": "2026-09-04"
     },
     "6727": {
       "firstMatchDate": "2026-09-02"
@@ -82,8 +91,11 @@
     "6830": {
       "firstMatchDate": "2026-08-28"
     },
-    "7795": {
-      "firstMatchDate": "2026-08-18"
+    "7711": {
+      "firstMatchDate": "2026-09-04"
+    },
+    "7788": {
+      "firstMatchDate": "2026-09-04"
     },
     "8039": {
       "firstMatchDate": "2026-08-28"
