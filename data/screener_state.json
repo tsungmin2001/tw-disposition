@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-09-06T16:01:16.592Z",
+  "lastUpdate": "2026-09-07T18:05:46.401Z",
   "stocks": {
     "1303": {
       "firstMatchDate": "2026-09-02"
@@ -22,11 +22,17 @@
     "2426": {
       "firstMatchDate": "2026-09-04"
     },
+    "2454": {
+      "firstMatchDate": "2026-09-07"
+    },
     "2455": {
       "firstMatchDate": "2026-09-02"
     },
     "2489": {
       "firstMatchDate": "2026-08-28"
+    },
+    "2492": {
+      "firstMatchDate": "2026-09-07"
     },
     "3008": {
       "firstMatchDate": "2026-09-04"
@@ -42,6 +48,9 @@
     },
     "3141": {
       "firstMatchDate": "2026-09-04"
+    },
+    "3167": {
+      "firstMatchDate": "2026-09-07"
     },
     "3324": {
       "firstMatchDate": "2026-09-02"
@@ -67,6 +76,12 @@
     "4977": {
       "firstMatchDate": "2026-09-02"
     },
+    "5475": {
+      "firstMatchDate": "2026-09-07"
+    },
+    "6147": {
+      "firstMatchDate": "2026-09-07"
+    },
     "6173": {
       "firstMatchDate": "2026-09-02"
     },
@@ -82,11 +97,20 @@
     "6290": {
       "firstMatchDate": "2026-09-04"
     },
+    "6291": {
+      "firstMatchDate": "2026-09-07"
+    },
     "6451": {
       "firstMatchDate": "2026-09-02"
     },
     "6510": {
       "firstMatchDate": "2026-09-04"
+    },
+    "6640": {
+      "firstMatchDate": "2026-09-07"
+    },
+    "6683": {
+      "firstMatchDate": "2026-09-07"
     },
     "6727": {
       "firstMatchDate": "2026-09-02"
@@ -105,6 +129,9 @@
     },
     "8039": {
       "firstMatchDate": "2026-08-28"
+    },
+    "8064": {
+      "firstMatchDate": "2026-09-07"
     },
     "8111": {
       "firstMatchDate": "2026-09-02"
