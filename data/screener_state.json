@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-09-09T17:01:28.774Z",
+  "lastUpdate": "2026-09-15T17:30:05.089Z",
   "stocks": {
     "1303": {
       "firstMatchDate": "2026-09-02"
@@ -10,11 +10,8 @@
     "1326": {
       "firstMatchDate": "2026-09-02"
     },
-    "1815": {
-      "firstMatchDate": "2026-08-28"
-    },
-    "2351": {
-      "firstMatchDate": "2026-08-28"
+    "2305": {
+      "firstMatchDate": "2026-09-15"
     },
     "2421": {
       "firstMatchDate": "2026-09-04"
@@ -28,9 +25,6 @@
     "2455": {
       "firstMatchDate": "2026-09-02"
     },
-    "2489": {
-      "firstMatchDate": "2026-08-28"
-    },
     "2492": {
       "firstMatchDate": "2026-09-07"
     },
@@ -43,8 +37,8 @@
     "3026": {
       "firstMatchDate": "2026-09-09"
     },
-    "3081": {
-      "firstMatchDate": "2026-08-28"
+    "3055": {
+      "firstMatchDate": "2026-09-15"
     },
     "3105": {
       "firstMatchDate": "2026-09-02"
@@ -67,11 +61,8 @@
     "3406": {
       "firstMatchDate": "2026-09-04"
     },
-    "3441": {
-      "firstMatchDate": "2026-08-28"
-    },
-    "4939": {
-      "firstMatchDate": "2026-08-28"
+    "3624": {
+      "firstMatchDate": "2026-09-15"
     },
     "4971": {
       "firstMatchDate": "2026-09-02"
@@ -87,9 +78,6 @@
     },
     "6173": {
       "firstMatchDate": "2026-09-02"
-    },
-    "6213": {
-      "firstMatchDate": "2026-08-28"
     },
     "6217": {
       "firstMatchDate": "2026-09-02"
@@ -127,20 +115,11 @@
     "6727": {
       "firstMatchDate": "2026-09-02"
     },
-    "6805": {
-      "firstMatchDate": "2026-08-28"
-    },
-    "6830": {
-      "firstMatchDate": "2026-08-28"
-    },
     "7711": {
       "firstMatchDate": "2026-09-04"
     },
     "7788": {
       "firstMatchDate": "2026-09-04"
-    },
-    "8039": {
-      "firstMatchDate": "2026-08-28"
     },
     "8064": {
       "firstMatchDate": "2026-09-07"
@@ -148,8 +127,8 @@
     "8111": {
       "firstMatchDate": "2026-09-02"
     },
-    "8358": {
-      "firstMatchDate": "2026-08-28"
+    "8227": {
+      "firstMatchDate": "2026-09-15"
     }
   }
 }
