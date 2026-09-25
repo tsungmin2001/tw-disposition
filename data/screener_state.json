@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-09-22T17:32:34.859Z",
+  "lastUpdate": "2026-09-25T17:44:01.427Z",
   "stocks": {
     "1560": {
       "firstMatchDate": "2026-09-22"
@@ -7,20 +7,23 @@
     "1709": {
       "firstMatchDate": "2026-09-22"
     },
+    "1727": {
+      "firstMatchDate": "2026-09-24"
+    },
+    "2221": {
+      "firstMatchDate": "2026-09-24"
+    },
     "2305": {
       "firstMatchDate": "2026-09-15"
     },
     "2338": {
       "firstMatchDate": "2026-09-22"
     },
+    "2404": {
+      "firstMatchDate": "2026-09-24"
+    },
     "2409": {
       "firstMatchDate": "2026-09-22"
-    },
-    "2454": {
-      "firstMatchDate": "2026-09-07"
-    },
-    "2492": {
-      "firstMatchDate": "2026-09-07"
     },
     "3016": {
       "firstMatchDate": "2026-09-22"
@@ -30,9 +33,6 @@
     },
     "3055": {
       "firstMatchDate": "2026-09-15"
-    },
-    "3167": {
-      "firstMatchDate": "2026-09-07"
     },
     "3264": {
       "firstMatchDate": "2026-09-22"
@@ -49,11 +49,11 @@
     "3624": {
       "firstMatchDate": "2026-09-15"
     },
-    "5475": {
-      "firstMatchDate": "2026-09-07"
+    "3665": {
+      "firstMatchDate": "2026-09-24"
     },
-    "6147": {
-      "firstMatchDate": "2026-09-07"
+    "4956": {
+      "firstMatchDate": "2026-09-24"
     },
     "6168": {
       "firstMatchDate": "2026-09-22"
@@ -61,32 +61,29 @@
     "6226": {
       "firstMatchDate": "2026-09-22"
     },
-    "6291": {
-      "firstMatchDate": "2026-09-07"
-    },
-    "6426": {
-      "firstMatchDate": "2026-09-08"
+    "6456": {
+      "firstMatchDate": "2026-09-24"
     },
     "6505": {
       "firstMatchDate": "2026-09-09"
     },
-    "6538": {
-      "firstMatchDate": "2026-09-08"
-    },
-    "6640": {
-      "firstMatchDate": "2026-09-07"
-    },
-    "6683": {
-      "firstMatchDate": "2026-09-07"
+    "6526": {
+      "firstMatchDate": "2026-09-24"
     },
     "6706": {
       "firstMatchDate": "2026-09-22"
     },
+    "6715": {
+      "firstMatchDate": "2026-09-24"
+    },
+    "6861": {
+      "firstMatchDate": "2026-09-24"
+    },
     "7717": {
       "firstMatchDate": "2026-09-22"
     },
-    "8064": {
-      "firstMatchDate": "2026-09-07"
+    "8150": {
+      "firstMatchDate": "2026-09-24"
     },
     "8227": {
       "firstMatchDate": "2026-09-15"
