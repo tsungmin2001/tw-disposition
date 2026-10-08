@@ -1,11 +1,20 @@
 {
-  "lastUpdate": "2026-10-01T18:43:47.581Z",
+  "lastUpdate": "2026-10-08T19:11:39.508Z",
   "stocks": {
+    "1301": {
+      "firstMatchDate": "2026-10-08"
+    },
+    "1303": {
+      "firstMatchDate": "2026-10-08"
+    },
     "1560": {
       "firstMatchDate": "2026-09-22"
     },
     "1709": {
       "firstMatchDate": "2026-09-22"
+    },
+    "1714": {
+      "firstMatchDate": "2026-10-08"
     },
     "1727": {
       "firstMatchDate": "2026-09-24"
@@ -13,14 +22,20 @@
     "2221": {
       "firstMatchDate": "2026-09-24"
     },
-    "2305": {
-      "firstMatchDate": "2026-09-15"
-    },
     "2338": {
       "firstMatchDate": "2026-09-22"
     },
+    "2340": {
+      "firstMatchDate": "2026-10-08"
+    },
     "2342": {
       "firstMatchDate": "2026-10-01"
+    },
+    "2368": {
+      "firstMatchDate": "2026-10-08"
+    },
+    "2383": {
+      "firstMatchDate": "2026-10-08"
     },
     "2404": {
       "firstMatchDate": "2026-09-24"
@@ -28,14 +43,14 @@
     "2409": {
       "firstMatchDate": "2026-09-22"
     },
+    "2492": {
+      "firstMatchDate": "2026-10-08"
+    },
     "3016": {
       "firstMatchDate": "2026-09-22"
     },
     "3037": {
       "firstMatchDate": "2026-10-01"
-    },
-    "3055": {
-      "firstMatchDate": "2026-09-15"
     },
     "3094": {
       "firstMatchDate": "2026-10-01"
@@ -64,9 +79,6 @@
     "3605": {
       "firstMatchDate": "2026-09-22"
     },
-    "3624": {
-      "firstMatchDate": "2026-09-15"
-    },
     "3653": {
       "firstMatchDate": "2026-10-01"
     },
@@ -79,8 +91,17 @@
     "4919": {
       "firstMatchDate": "2026-10-01"
     },
+    "4927": {
+      "firstMatchDate": "2026-10-08"
+    },
     "4956": {
       "firstMatchDate": "2026-09-24"
+    },
+    "4958": {
+      "firstMatchDate": "2026-10-08"
+    },
+    "4989": {
+      "firstMatchDate": "2026-10-08"
     },
     "5483": {
       "firstMatchDate": "2026-10-01"
@@ -90,6 +111,12 @@
     },
     "6182": {
       "firstMatchDate": "2026-10-01"
+    },
+    "6187": {
+      "firstMatchDate": "2026-10-08"
+    },
+    "6196": {
+      "firstMatchDate": "2026-10-08"
     },
     "6207": {
       "firstMatchDate": "2026-10-01"
@@ -103,11 +130,20 @@
     "6257": {
       "firstMatchDate": "2026-10-01"
     },
+    "6274": {
+      "firstMatchDate": "2026-10-08"
+    },
     "6426": {
       "firstMatchDate": "2026-09-24"
     },
+    "6449": {
+      "firstMatchDate": "2026-10-08"
+    },
     "6456": {
       "firstMatchDate": "2026-09-24"
+    },
+    "6505": {
+      "firstMatchDate": "2026-10-08"
     },
     "6526": {
       "firstMatchDate": "2026-09-24"
@@ -145,11 +181,14 @@
     "8064": {
       "firstMatchDate": "2026-10-01"
     },
+    "8086": {
+      "firstMatchDate": "2026-10-08"
+    },
+    "8111": {
+      "firstMatchDate": "2026-10-08"
+    },
     "8150": {
       "firstMatchDate": "2026-09-24"
-    },
-    "8227": {
-      "firstMatchDate": "2026-09-15"
     },
     "8996": {
       "firstMatchDate": "2026-09-22"
