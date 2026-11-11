@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-11-10T20:11:22.063Z",
+  "lastUpdate": "2026-11-11T20:00:36.266Z",
   "stocks": {
     "2465": {
       "firstMatchDate": "2026-11-04"
@@ -13,11 +13,8 @@
     "4526": {
       "firstMatchDate": "2026-10-29"
     },
-    "4960": {
-      "firstMatchDate": "2026-10-22"
-    },
-    "6269": {
-      "firstMatchDate": "2026-10-22"
+    "6148": {
+      "firstMatchDate": "2026-11-11"
     },
     "6415": {
       "firstMatchDate": "2026-10-29"
